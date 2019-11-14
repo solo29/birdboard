@@ -15,7 +15,8 @@ class ProjectsController extends Controller
     public function index()
     {
         //
-        return Project::all();
+
+        return view('projects.index', ['projects' => Project::all()]);
     }
 
     /**
@@ -24,9 +25,7 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {
-        
-    }
+    { }
 
     /**
      * Store a newly created resource in storage.
@@ -34,9 +33,14 @@ class ProjectsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         //
+        $attributes =  request()->validate(['title' => 'required', 'description' => 'required']);
+
+        Project::create($attributes);
+
+        return redirect('/projects');
     }
 
     /**
@@ -48,6 +52,8 @@ class ProjectsController extends Controller
     public function show($id)
     {
         //
+
+        return Project::findOrFail($id);
     }
 
     /**
