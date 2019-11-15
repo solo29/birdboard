@@ -12,3 +12,19 @@
 @import "tailwindcss/components";
 
 @import "tailwindcss/utilities";
+
+.btn {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded shadow-lg;
+}
+
+.btn-red {
+    @apply bg-red-500;
+}
+
+.btn-green {
+    @apply bg-green-500;
+}
+
+.card {
+    @apply bg-white  rounded-lg shadow  p-5;
+}
