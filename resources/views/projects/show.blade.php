@@ -14,7 +14,10 @@
 
     <div class="lg:flex m-4 p-4">
         <div class="w-3/4 px-2">
-            <h2 class="card ">Tasls</h2>
+            @foreach ($project->tasks as $tasks)
+            <h2 class="card ">{{$tasks->body}}</h2>
+            @endforeach
+
 
             <h2 class="card mt-5">General Notes</h2>
 
@@ -24,7 +27,7 @@
                 entore?</h2>
         </div>
         <div class="w-1/4">
-            @include('projects.card', ['length'=>200])
+            @include('projects.card')
         </div>
 
 
