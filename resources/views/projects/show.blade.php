@@ -6,7 +6,7 @@
     <h1>
         {{$project->title}}
     </h1>
-    <p>
+    <p class="text-red">
         {{$project->description}}
     </p>
 
