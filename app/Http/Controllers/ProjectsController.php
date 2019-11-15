@@ -25,7 +25,10 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    { }
+    {
+
+        return view('projects.create');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,7 +65,7 @@ class ProjectsController extends Controller
 
 
 
-        return $project;
+        return view('projects.show', compact('project'));
     }
 
     /**

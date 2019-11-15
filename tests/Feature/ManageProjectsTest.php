@@ -16,16 +16,24 @@ class ProjectsTest extends TestCase
 
         //  $this->withoutExceptionHandling();
 
-        $attributes = factory('App\Project')->raw();
+        $project = factory('App\Project')->create();
 
-        $this->post('/projects', $attributes)->assertRedirect('login');
+        $this->post('/projects', $project->toArray())->assertRedirect('login');
+
+        $this->get('/projects')->assertRedirect('login');
+
+        $this->get('/projects/create')->assertRedirect('login');
+
+        $this->get($project->path())->assertRedirect('login');
     }
 
     public function test_user_can_create_project()
     {
 
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         $this->actingAs(factory('App\User')->create());
+
+        $this->get('/projects/create')->assertStatus(200);
 
         $attributes = [
             'title' => $this->faker->sentence,
@@ -71,14 +79,6 @@ class ProjectsTest extends TestCase
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
 
-    public function test_guest_cant_view_projects()
-    {
-        $this->get('/projects')->assertRedirect('login');
-
-        $project = factory('App\Project')->create();
-
-        $this->get($project->path())->assertRedirect('login');
-    }
 
     public function test_user_can_view_their_projects()
     {
