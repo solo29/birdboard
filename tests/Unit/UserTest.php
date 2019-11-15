@@ -19,4 +19,11 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $user->projects);
     }
+
+    public function test_project_belongsto_user()
+    {
+        $project = factory('App\Project')->create();
+
+        $this->assertInstanceOf('App\User', $project->owner);
+    }
 }

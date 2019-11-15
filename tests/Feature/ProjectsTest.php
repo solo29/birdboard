@@ -44,7 +44,7 @@ class ProjectsTest extends TestCase
     {
         $this->actingAs(factory('App\User')->create());
 
-        $project =  factory('App\Project')->create();
+        $project =  factory('App\Project')->create(['owner_id' => auth()->id()]);
 
         $this->get($project->path())->assertSee($project->title)->assertSee($project->description);
     }
@@ -69,5 +69,37 @@ class ProjectsTest extends TestCase
         $attributes = factory('App\Project')->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
+
+    public function test_guest_cant_view_projects()
+    {
+        $this->get('/projects')->assertRedirect('login');
+
+        $project = factory('App\Project')->create();
+
+        $this->get($project->path())->assertRedirect('login');
+    }
+
+    public function test_user_can_view_their_projects()
+    {
+        $this->actingAs(factory('App\User')->create());
+
+        $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
+
+        $this->get($project->path())->assertSee($project->title)->assertSee($project->description);
+    }
+
+    public function test_user_can_view_others_projects()
+    {
+
+
+
+        $this->actingAs(factory('App\User')->create());
+
+
+        $project = factory('App\Project')->create();
+
+
+        $this->get($project->path())->assertStatus(403);
     }
 }

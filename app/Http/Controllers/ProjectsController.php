@@ -16,7 +16,7 @@ class ProjectsController extends Controller
     {
         //
 
-        return view('projects.index', ['projects' => Project::all()]);
+        return view('projects.index', ['projects' => auth()->user()->projects]);
     }
 
     /**
@@ -54,11 +54,15 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
-        //
+        if (auth()->user()->isNot($project->owner)) {
+            abort(403);
+        }
 
-        return Project::findOrFail($id);
+
+
+        return $project;
     }
 
     /**
