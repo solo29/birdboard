@@ -2,16 +2,19 @@
 
 @section('content')
 <div class="container">
-    <h1>Birdboard</h1>
+
     <a href="/projects/create">Create Project</a>
-    <ul>
+    <div class="container mx-auto flex">
         @forelse ($projects as $project)
-        <li>
-            <a href="{{$project->path()}}">{{$project->title}}</a>
-        </li>
+        <div class=" bg-white mr-2 rounded-lg shadow w-1/3 p-5" style="height:200px">
+            <h3 class="font-normal text-xl py-2">
+                {{$project->title}}
+            </h3>
+            <p class="text-gray-600"> {{Str::limit($project->description)}}</p>
+        </div>
         @empty
-        <li>No projects yet.</li>
+        <div>No projects yet.</div>
         @endforelse
-    </ul>
+    </div>
 </div>
 @endsection
