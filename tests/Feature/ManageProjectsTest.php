@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -37,13 +38,36 @@ class ProjectsTest extends TestCase
 
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph
-
+            'description' => $this->faker->paragraph,
+            'notes' => $this->faker->sentence
         ];
 
         $this->post('/projects', $attributes);
 
 
+
+        $this->assertDatabaseHas('projects', $attributes);
+    }
+
+    public function test_user_can_update_note()
+    {
+
+        // $this->withoutExceptionHandling();
+        $this->signIn();
+
+        $attributes = [
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+            'notes' => $this->faker->sentence
+        ];
+
+        $this->post('/projects', $attributes);
+
+        $project = Project::where($attributes)->first();
+
+        $this->patch('/projects/' . $project->id, ['notes' => 'changed'])->assertRedirect($project->path());
+
+        $attributes['notes'] = 'changed';
 
         $this->assertDatabaseHas('projects', $attributes);
     }
@@ -89,7 +113,7 @@ class ProjectsTest extends TestCase
         $this->get($project->path())->assertSee($project->title)->assertSee($project->description);
     }
 
-    public function test_user_can_view_others_projects()
+    public function test_user_can_view_or_update_others_projects()
     {
 
 
@@ -99,7 +123,7 @@ class ProjectsTest extends TestCase
 
         $project = factory('App\Project')->create();
 
-
+        $this->patch($project->path(), ['notes' => 'changed'])->assertStatus(403);
         $this->get($project->path())->assertStatus(403);
     }
 }

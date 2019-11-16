@@ -27,7 +27,7 @@
             <div class="container mx-auto">
                 <div class="flex justify-between items-center py-1">
 
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/projects') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
 

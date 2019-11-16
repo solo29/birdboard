@@ -43,6 +43,14 @@
                 </form>
             </div>
 
+            <form action="{{$project->path()}}" method="POST">
+                @CSRF
+                @method('PATCH')
+                <textarea class="card mt-2 w-full" name="notes" cols="30" rows="10">
+                {{$project->notes}}
+                </textarea>
+                <button class="btn">Save</button>
+            </form>
 
 
 
