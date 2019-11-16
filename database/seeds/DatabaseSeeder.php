@@ -12,5 +12,22 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+
+
+        $userId = App\User::insertGetId([
+
+            'name' => 'solo',
+            'email' => 'solo@solo.ge',
+            'password' => bcrypt('solo'),
+        ]);
+
+
+        $quantity = 10;
+
+        factory('App\Project', $quantity)->create(['owner_id' => $userId]);
+
+        while ($quantity > 0) {
+            factory('App\Task', rand(1, 8))->create(['project_id' => $quantity--]);
+        }
     }
 }

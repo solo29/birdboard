@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    create
+    Create
 
     <form action="/projects" method="POST">
         @CSRF
@@ -10,5 +10,7 @@
         <textarea type="text" name="description"></textarea>
         <button>Submit</button>
     </form>
+
+    <a href="/projects">Projects</a>
 </div>
 @endsection

@@ -6,7 +6,7 @@
     <header class="mb-3 py-3 flex">
 
         <div class="flex justify-between w-full items-center">
-            <h2 class="text-gray-600">My Project</h2>
+            <h2 class="text-gray-600"><a href="/projects"> My Project</a></h2>
             <a class="btn" href="/projects/create">Create Project</a>
         </div>
 
@@ -14,17 +14,39 @@
 
     <div class="lg:flex m-4 p-4">
         <div class="w-3/4 px-2">
-            @foreach ($project->tasks as $tasks)
-            <h2 class="card ">{{$tasks->body}}</h2>
-            @endforeach
+            Tasks
+
+            @forelse ($project->tasks as $task)
+
+            <div class="card mt-2">
+
+                <form action="{{$task->path()}}" method="POST">
+                    @CSRF
+                    @method('PATCH')
+                    <div class="flex">
+                        <input name="body" class="w-full" value="{{$task->body}}" placeholder="There is No Task Bae :)">
+                        <input {{ $task->completed ? 'checked':''}} type="checkbox" name="completed" onchange="this.form.submit()">
+                    </div>
+                </form>
+            </div>
+
+            @empty
+            <div class="card">
+                <p>There is No Tasks</p>
+            </div>
+            @endforelse
+
+            <div class="card mt-2">
+                <form action="{{$project->path()}}/tasks" method="POST">
+                    @CSRF
+                    <input name="body" class="w-full" placeholder="There is No Task Bae :)">
+                </form>
+            </div>
 
 
-            <h2 class="card mt-5">General Notes</h2>
 
-            <h2 class="card mt-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti pe
-                rferendis reprehenderit ullam quae quibusdam, molestias porro ipsam maxi
-                me voluptas reiciendis. Ut enim doloremque laboriosam cum veniam id blanditiis eligendi inv
-                entore?</h2>
+
+
         </div>
         <div class="w-1/4">
             @include('projects.card')
