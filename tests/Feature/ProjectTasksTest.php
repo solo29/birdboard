@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 class ProjectTasksTest extends TestCase
@@ -13,11 +14,11 @@ class ProjectTasksTest extends TestCase
 
     public function test_project_can_have_task()
     {
-        $this->signIn();
+        $user =  $this->signIn();
 
         $this->withoutExceptionHandling();
 
-        $project = factory(Project::class)->create(['owner_id' => auth()->id()]);
+        $project = ProjectFactory::ownedBy($user)->create();
 
         $this->post($project->path() . '/tasks', ['body' => 'Test Task']);
 
@@ -27,11 +28,11 @@ class ProjectTasksTest extends TestCase
     public function test_task_can_be_updated()
     {
 
-        $this->signIn();
+        $user = $this->signIn();
 
         $this->withoutExceptionHandling();
 
-        $project = factory(Project::class)->create(['owner_id' => auth()->id()]);
+        $project = ProjectFactory::ownedBy($user)->create();
 
         $task = $project->addTask('old task');
 
@@ -42,9 +43,9 @@ class ProjectTasksTest extends TestCase
 
     public function test_requires_body()
     {
-        $this->signIn();
+        $user = $this->signIn();
 
-        $project = factory(Project::class)->create(['owner_id' => auth()->id()]);
+        $project = ProjectFactory::ownedBy($user)->create();
 
         $attributes = factory('App\Task')->raw(['body' => '']);
 
@@ -56,7 +57,7 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::create();
 
         $this->post($project->path() . '/tasks', ['body' => 'cant add'])->assertStatus(403);
 
@@ -67,14 +68,11 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::create();
 
         $task = $project->addTask('added');
 
-
-
         $this->patch($task->path(), ['body' => 'updated'])->assertStatus(403);
-
 
         $this->assertDatabaseMissing('tasks', ['body' => 'updated']);
     }
