@@ -32,6 +32,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/projects/{project}/tasks/{task}', 'ProjectTasksController@update');
 
     Route::patch('/projects/{project}', 'ProjectsController@update');
+
+    Route::patch('/projects/{project}/update', 'ProjectsController@update');
+
+    Route::get('/projects/{project}/update', 'ProjectsController@update_route');
 });
 
 Auth::routes();

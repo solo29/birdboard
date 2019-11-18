@@ -7,7 +7,7 @@
 
         <div class="flex justify-between w-full items-center">
             <h2 class="text-gray-600"><a href="/projects"> My Project</a></h2>
-            <a class="btn" href="/projects/create">Create Project</a>
+            <a class="btn" href="{{$project->path().'/update'}}">Update Project</a>
         </div>
 
     </header>

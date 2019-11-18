@@ -85,17 +85,13 @@ class ProjectsController extends Controller
      */
     public function update(Project $project)
     {
-        // if (auth()->user()->isNot($project->owner)) {
-        //     abort(403);
-        // }
+
         $this->authorize('update', $project);
 
-        request()->validate(['notes' => 'required']);
+        $attributes = request()->validate(['notes' => 'sometimes|required', 'title' => 'sometimes|required', 'description' => 'sometimes|required']);
 
         $project->update(
-            [
-                'notes' => request('notes'),
-            ]
+            $attributes
         );
 
         return redirect($project->path());
@@ -107,6 +103,16 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function update_route(Project $project)
+    {
+
+        $this->authorize('update', $project);
+
+
+        return view('projects.update', compact('project'));
+    }
+
     public function destroy($id)
     {
         //

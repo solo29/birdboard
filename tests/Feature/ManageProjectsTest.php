@@ -71,6 +71,27 @@ class ProjectsTest extends TestCase
         $attributes['notes'] = 'changed';
     }
 
+    public function test_user_can_update_title_and_description()
+    {
+
+        // $this->withoutExceptionHandling();
+        $this->signIn();
+
+        $attributes = [
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+            'notes' => $this->faker->sentence
+        ];
+
+        $this->post('/projects', $attributes);
+
+        $project = Project::where($attributes)->first();
+
+        $this->patch('/projects/' . $project->id, ['title' => 'changed', 'description' => 'changed'])->assertRedirect($project->path());
+
+        $attributes['notes'] = 'changed';
+    }
+
     public function test_user_can_view_project()
     {
         $user = $this->signIn();
