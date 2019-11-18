@@ -58,4 +58,18 @@ class ActivityFeedTest extends TestCase
 
         $this->assertEquals('completed_task', $project->activity->last()->description);
     }
+
+    public function test_deleting_task_records_activity()
+    {
+
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::withTasks(1)->create();
+
+        $this->assertCount(2, $project->activity);
+
+        $project->tasks[0]->delete();
+
+        $this->assertCount(3, $project->fresh()->activity);
+    }
 }

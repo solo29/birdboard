@@ -28,4 +28,28 @@ class TaskTest extends TestCase
 
         $this->assertInstanceOf('App\Project', $task->project);
     }
+
+    public function test_it_can_be_completed()
+    {
+
+        $task = factory('App\Task')->create();
+
+        $this->assertFalse($task->completed);
+
+        $task->complete();
+
+        $this->assertTrue($task->fresh()->completed);
+    }
+
+    public function test_it_can_be_incompleted()
+    {
+
+        $task = factory('App\Task')->create();
+
+
+        $task->complete();
+
+        $task->inComplete();
+        $this->assertFalse($task->fresh()->completed);
+    }
 }

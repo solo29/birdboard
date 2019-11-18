@@ -41,6 +41,48 @@ class ProjectTasksTest extends TestCase
         $this->assertDatabaseHas('tasks', ['body' => 'new task', 'completed' => true]);
     }
 
+
+    public function test_task_can_be_incompleted()
+    {
+
+        $user = $this->signIn();
+
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($user)->create();
+
+        $task = $project->addTask('old task');
+        $task->complete();
+
+        $task->inComplete();
+
+        $this->assertFalse($task->completed);
+        // $this->patch($task->path(), ['body' => 'new task', 'completed' => true]);
+        $this->assertDatabaseHas('tasks', ['completed' => false]);
+    }
+
+
+    public function test_task_can_be_completed_from_request()
+    {
+
+        $user = $this->signIn();
+
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($user)->create();
+
+        $task = $project->addTask('old task');
+        $task->complete();
+
+        $this->patch($task->path(), ['body' => 'changed', 'completed' => false]);
+
+        //$task->inComplete();
+
+        // $this->patch($task->path(), ['body' => 'new task', 'completed' => true]);
+
+        $this->assertDatabaseHas('tasks', ['completed' => false]);
+    }
+
     public function test_requires_body()
     {
         $user = $this->signIn();

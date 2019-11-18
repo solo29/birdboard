@@ -7,29 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     //
+
+    protected $casts = [
+        'completed' => 'boolean'
+    ];
+
     protected $guarded = [];
 
     protected $touches = ['project'];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($task) {
-            Activity::create([
-                'project_id' => $task->project->id,
-                'description' => 'created_task'
-            ]);
-        });
-
-        static::updated(function ($task) {
-            if (!$task->completed) return;
-            Activity::create([
-                'project_id' => $task->project->id,
-                'description' => 'completed_task'
-            ]);
-        });
-    }
 
     public function project()
     {
@@ -37,6 +23,19 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function complete()
+    {
+        $this->update(['completed' => true]);
+
+        $this->project->recordActivity('completed_task');
+    }
+
+    public function inComplete()
+    {
+        $this->update(['completed' => false]);
+
+        $this->project->recordActivity('incompleted_task');
+    }
 
     public function path()
     {
