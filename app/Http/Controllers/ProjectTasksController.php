@@ -37,8 +37,7 @@ class ProjectTasksController extends Controller
     public function store(Project $project)
     {
 
-        if (auth()->user()->isNot($project->owner))
-            return abort(403);
+        $this->authorize('update', $project);
 
 
         $attributes = request()->validate(['body' => 'required']);

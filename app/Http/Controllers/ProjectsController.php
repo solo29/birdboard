@@ -38,7 +38,8 @@ class ProjectsController extends Controller
      */
     public function store()
     {
-        //
+        if (!auth()->check())
+            abort(403);
         //$this->authorize('update', $project);
 
         $attributes =  request()->validate(['title' => 'required', 'description' => 'required', 'notes' => 'min:3']);
