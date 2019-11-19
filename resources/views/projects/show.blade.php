@@ -10,6 +10,8 @@
             <a class="btn" href="{{$project->path().'/update'}}">Update Project</a>
         </div>
 
+
+
     </header>
 
     <div class="lg:flex m-4 p-4">
@@ -58,6 +60,7 @@
         </div>
         <div class="w-1/4">
             @include('projects.card')
+            @include('projects.activity.card')
         </div>
 
 
