@@ -1,1 +1,1 @@
-Task Created ({{$activity->subject->body}})
+{{$activity->user->name}} Created Task ({{$activity->subject->body}})

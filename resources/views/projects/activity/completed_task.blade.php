@@ -1,1 +1,1 @@
-task completed ({{$activity->subject->body}})
+{{$activity->user->name}} task completed ({{$activity->subject->body}})
