@@ -8,27 +8,22 @@ Route::get('/', function () {
 
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/projects', 'ProjectsController@index');
 
-    Route::get('/projects/create', 'ProjectsController@create');
+    // Route::get('/projects', 'ProjectsController@index');
+    // Route::get('/projects/create', 'ProjectsController@create');
+    // Route::get('/projects/{project}', 'ProjectsController@show');
+    // Route::get('/projects/{project}/edit', 'ProjectsController@edit');
+    // Route::patch('/projects/{project}', 'ProjectsController@update');
+    // Route::post('/projects', 'ProjectsController@store');
+    // Route::delete('/projects/{project}',  'ProjectsController@destroy');
 
+    Route::resource('projects', 'ProjectsController');
 
-
-    Route::get('/projects/{project}', 'ProjectsController@show');
-
-    Route::post('/projects', 'ProjectsController@store');
 
     Route::post('/projects/{project}/tasks', 'ProjectTasksController@store');
-
     Route::patch('/projects/{project}/tasks/{task}', 'ProjectTasksController@update');
 
-    Route::patch('/projects/{project}', 'ProjectsController@update');
-
-    Route::patch('/projects/{project}/update', 'ProjectsController@update');
-
-    Route::get('/projects/{project}/update', 'ProjectsController@update_route');
+    Route::get('/home', 'HomeController@index')->name('home');
 });
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

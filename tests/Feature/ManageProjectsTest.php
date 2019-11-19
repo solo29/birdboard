@@ -143,4 +143,15 @@ class ProjectsTest extends TestCase
 
         $this->get($project->path())->assertStatus(403);
     }
+
+    public function test_user_can_delete_project()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->delete($project->path())
+            ->assertRedirect('/projects');
+
+        $this->assertNull($project->fresh());
+    }
 }

@@ -39,6 +39,7 @@ class ProjectsController extends Controller
     public function store()
     {
         //
+        //$this->authorize('update', $project);
 
         $attributes =  request()->validate(['title' => 'required', 'description' => 'required', 'notes' => 'min:3']);
 
@@ -46,7 +47,7 @@ class ProjectsController extends Controller
 
         $project = auth()->user()->projects()->create($attributes);
 
-
+        //   /  $this->authorize('update', $project);
 
         return redirect($project->path());
     }
@@ -65,16 +66,6 @@ class ProjectsController extends Controller
         return view('projects.show', compact('project'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -104,7 +95,7 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update_route(Project $project)
+    public function edit(Project $project)
     {
 
         $this->authorize('update', $project);
@@ -113,8 +104,12 @@ class ProjectsController extends Controller
         return view('projects.update', compact('project'));
     }
 
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        //
+        $this->authorize('update', $project);
+
+        $project->delete();
+
+        return redirect('/projects');
     }
 }
