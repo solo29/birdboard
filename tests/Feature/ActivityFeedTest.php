@@ -55,7 +55,10 @@ class ActivityFeedTest extends TestCase
             $this->assertEquals('created_task', $activity->description);
             $this->assertEquals('new task', $activity->subject->body);
             $this->assertInstanceOf(Task::class, $activity->subject);
-            dd($activity->getAttributes());
+        });
+
+        tap($project->activity->first(), function ($activity) {
+            //
             $this->assertNull($activity->changes);
         });
     }
