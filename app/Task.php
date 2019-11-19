@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     //
+    use RecordsActivity;
+
+    protected static $recordableEvents = ['created', 'deleted'];
 
     protected $casts = [
         'completed' => 'boolean'
@@ -41,16 +44,5 @@ class Task extends Model
     {
         //return $this->project->path() . '/tasks/' . $this->id;
         return '/projects/' . $this->project->id . '/tasks/' . $this->id;
-    }
-
-    public function activity()
-    {
-        return $this->morphMany(Activity::class, 'subject')->latest();
-    }
-
-
-    public function recordActivity($description)
-    {
-        $this->activity()->create(['description' => $description, 'project_id' => $this->project_id]);
     }
 }
