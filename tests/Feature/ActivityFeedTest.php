@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
+use App\Task;
 
 class ActivityFeedTest extends TestCase
 {
@@ -41,7 +42,11 @@ class ActivityFeedTest extends TestCase
 
         $this->assertCount(2, $project->activity);
 
-        $this->assertEquals('created_task', $project->activity->last()->description);
+        tap($project->activity->last(), function ($activity) {
+            $this->assertEquals('created_task', $activity->description);
+            $this->assertEquals('new task', $activity->subject->body);
+            $this->assertInstanceOf(Task::class, $activity->subject);
+        });
     }
 
     public function test_completing_task_records_activity()
@@ -56,7 +61,10 @@ class ActivityFeedTest extends TestCase
 
         $this->assertCount(3, $project->activity);
 
-        $this->assertEquals('completed_task', $project->activity->last()->description);
+        tap($project->activity->last(), function ($activity) {
+            $this->assertEquals('completed_task', $activity->description);
+            $this->assertInstanceOf(Task::class, $activity->subject);
+        });
     }
 
     public function test_deleting_task_records_activity()

@@ -1,1 +1,1 @@
-task updated
+task updated ({{$activity->subject->body}})
