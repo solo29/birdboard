@@ -19,6 +19,7 @@ class CreateActivitiesTable extends Migration
             $table->nullableMorphs('subject');
             // $table->unsignedBigInteger('subject_id');
             // $table->string('subject_type');
+            $table->text('changes')->nullable();
             $table->string('description');
             $table->timestamps();
 
