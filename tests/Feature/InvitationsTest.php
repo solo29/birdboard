@@ -34,11 +34,9 @@ class InvitationsTest extends TestCase
         $project = ProjectFactory::create();
 
         $this->actingAs($project->owner)->post($project->path() . '/invitations', ['email' => 'notfound@not.ge'])
-
-            ->assertSessionHasErrors(['email' => 'Invited user must have an account']);
+            ->assertSessionHasErrors(['email' => 'Invited user must have an account'], null, 'invitations'); //(['email' => 'Invited user must have an account']);
     }
-
-
+    // exception.customMessages.email.exists
     public function test_invitation_wokrs()
     {
         $this->withoutExceptionHandling();
@@ -63,5 +61,21 @@ class InvitationsTest extends TestCase
 
         $this->actingAs(factory(User::class)
             ->create())->post(ProjectFactory::create()->path() . '/invitations', ['email' => 'some@some.ge'])->assertStatus(403);
+    }
+
+    public function test_members_cant_invite_only_owner_can()
+    {
+
+        $project = ProjectFactory::create();
+
+        $invitedUser = factory(User::class)->create();
+
+        $this->actingAs($project->owner)->post($project->path() . '/invitations', ['email' => $invitedUser->email]);
+
+        $user3 = factory(User::class)->create();
+
+        $this->actingAs($invitedUser)->post($project->path() . '/invitations', ['email' => $user3->email])->assertStatus(403);
+
+        $this->assertFalse($project->members->contains($user3));
     }
 }
