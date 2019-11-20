@@ -11,6 +11,7 @@ class Project extends Model
     protected $guarded = [];
 
 
+
     public function path()
     {
 
@@ -43,6 +44,6 @@ class Project extends Model
     }
     public function members()
     {
-        return $this->belongsToMany(User::class, 'project_members');
+        return $this->belongsToMany(User::class, 'project_members')->withTimestamps();
     }
 }

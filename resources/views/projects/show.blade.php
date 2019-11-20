@@ -7,7 +7,14 @@
 
         <div class="flex justify-between w-full items-center">
             <h2 class="text-gray-600"><a href="/projects"> My Project</a></h2>
-            <a class="btn" href="{{$project->path().'/update'}}">Update Project</a>
+            <div class="flex flex-row">
+                @foreach ($project->members as $member)
+                <img class="rounded-full mr-2" src="{{gravatar_url($member->email)}}" alt="{{$member->name}}">
+                @endforeach
+
+                <img class="rounded-full mr-2" src="{{gravatar_url($project->owner->email)}}" alt="{{$member->name}}">
+                <a class="btn" href="{{$project->path().'/update'}}">Update Project</a>
+            </div>
         </div>
 
 

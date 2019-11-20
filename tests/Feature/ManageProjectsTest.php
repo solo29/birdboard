@@ -154,4 +154,16 @@ class ProjectsTest extends TestCase
 
         $this->assertNull($project->fresh());
     }
+
+    public function test_user_can_see_all_projects()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $project = ProjectFactory::create();
+
+        $project->invite($user);
+
+        $this->get('/projects')->assertSee($project->title);
+    }
 }

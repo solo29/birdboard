@@ -21,6 +21,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('solo'),
         ]);
 
+        $userId2 = App\User::insertGetId([
+
+            'name' => 'shoka',
+            'email' => 'shoka@shoka.ge',
+            'password' => bcrypt('shoka'),
+        ]);
+
 
         $quantity = 10;
 

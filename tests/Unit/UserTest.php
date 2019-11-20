@@ -2,9 +2,11 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -25,5 +27,23 @@ class UserTest extends TestCase
         $project = factory('App\Project')->create();
 
         $this->assertInstanceOf('App\User', $project->owner);
+    }
+
+    public function test_has_all_project()
+    {
+        $solo = $this->signIn();
+
+        ProjectFactory::ownedBy($solo)->create();
+
+        $this->assertCount(1, $solo->allProjects());
+
+        $eka = factory(User::class)->create();
+
+        ProjectFactory::ownedBy($eka)->create()->invite($solo);
+
+        $this->assertCount(1, $eka->allProjects());
+
+        $this->assertCount(2, $solo->allProjects());
+        //$this->assertInstanceOf('App\User', $project->allProjects);
     }
 }
