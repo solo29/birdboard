@@ -166,4 +166,21 @@ class ProjectsTest extends TestCase
 
         $this->get('/projects')->assertSee($project->title);
     }
+
+    public function test_unauthorized_cannote_delete_project()
+    {
+
+        $user = $this->signIn();
+
+        $project = ProjectFactory::create();
+        $this->actingAs($user)
+            ->delete($project->path())
+            ->assertStatus(403);
+
+        $project->invite($user);
+
+        $this->actingAs($user)
+            ->delete($project->path())
+            ->assertStatus(403);
+    }
 }

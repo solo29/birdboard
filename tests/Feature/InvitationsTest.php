@@ -34,7 +34,8 @@ class InvitationsTest extends TestCase
         $project = ProjectFactory::create();
 
         $this->actingAs($project->owner)->post($project->path() . '/invitations', ['email' => 'notfound@not.ge'])
-            ->assertSessionHasErrors(['email' => 'Invited user must have an account'], null, 'invitations'); //(['email' => 'Invited user must have an account']);
+            ->assertSessionHasErrors(['email' => 'Invited user must have an account'], null, 'invitations');
+        //(['email' => 'Invited user must have an account']);
     }
     // exception.customMessages.email.exists
     public function test_invitation_wokrs()

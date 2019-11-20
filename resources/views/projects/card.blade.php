@@ -5,6 +5,7 @@
     </h3>
     <p class="text-gray-600 mt-2 flex-1"> {{Str::limit($project->description, -1)}}</p>
 
+    @can ('manage', $project)
     <footer class="mt-3">
         <form action="{{$project->path()}}" class="text-right" method="POST">
             @method('DELETE')
@@ -12,4 +13,5 @@
             <button type="submit" class="text-xs">Delete</button>
         </form>
     </footer>
+    @endcan
 </div>
