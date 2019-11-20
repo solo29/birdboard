@@ -12,7 +12,7 @@
                 <img class="rounded-full mr-2" src="{{gravatar_url($member->email)}}" alt="{{$member->name}}">
                 @endforeach
 
-                <img class="rounded-full mr-2" src="{{gravatar_url($project->owner->email)}}" alt="{{$member->name}}">
+                <img class="rounded-full mr-2" src="{{gravatar_url($project->owner->email)}}">
                 <a class="btn" href="{{$project->path().'/update'}}">Update Project</a>
             </div>
         </div>

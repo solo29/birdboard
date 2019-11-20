@@ -12,8 +12,34 @@ class InvitationsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_user_can_invite_to_project()
+    {
+        $this->withoutExceptionHandling();
+        $project = ProjectFactory::create();
 
-    public function test_project_can_invate_user()
+        $invitedUser = factory(User::class)->create();
+
+        $this->actingAs($project->owner)->post(
+            $project->path() . '/invitations',
+
+            ['email' => $invitedUser->email]
+        )->assertRedirect($project->path());
+
+
+        $this->assertTrue($project->members->contains($invitedUser));
+    }
+
+    public function test_invitation_only_for_registered()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)->post($project->path() . '/invitations', ['email' => 'notfound@not.ge'])
+
+            ->assertSessionHasErrors(['email' => 'Invited user must have an account']);
+    }
+
+
+    public function test_invitation_wokrs()
     {
         $this->withoutExceptionHandling();
         $project = ProjectFactory::create();
@@ -28,5 +54,14 @@ class InvitationsTest extends TestCase
         //dd($project->fresh()->tasks->toArray());
 
         $this->assertDatabaseHas('tasks', $task);
+    }
+
+    public function test_only_owner_can_invite_member()
+    {
+        // $this->withoutExceptionHandling();
+
+
+        $this->actingAs(factory(User::class)
+            ->create())->post(ProjectFactory::create()->path() . '/invitations', ['email' => 'some@some.ge'])->assertStatus(403);
     }
 }
